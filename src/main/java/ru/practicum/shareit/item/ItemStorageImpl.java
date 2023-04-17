@@ -55,9 +55,7 @@ public class ItemStorageImpl implements ItemStorage {
 
     @Override
     public Collection<Item> getItems(Long ownerId) {
-        return items.values().stream()
-                .filter(it -> Objects.equals(it.getOwner(), ownerId))
-                .collect(Collectors.toList());
+        return items.values().stream().filter(it -> Objects.equals(it.getOwner(), ownerId)).collect(Collectors.toList());
     }
 
     @Override
