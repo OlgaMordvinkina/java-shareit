@@ -1,43 +1,43 @@
 package ru.practicum.shareit.user;
 
-import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.user.model.UserDto;
 
 import java.util.Collection;
 
 public interface UserService {
     /**
-     * Create a new User
+     * Create a new UserDto
      *
-     * @param user
-     * @return new User
+     * @param userDto
+     * @return new UserDto
      */
-    User createUser(User user);
+    UserDto createUser(UserDto userDto);
 
     /**
-     * Updates the user
+     * Updates the userDto
      *
-     * @param user
+     * @param userDto
      * @return updated User
      */
-    User updateUser(User user);
+    UserDto updateUser(UserDto userDto);
 
     /**
-     * Returns a User by id
+     * Returns a UserDto by id
      *
      * @param id
-     * @return User or null if no object exists
+     * @return UserDto or null if no object exists
      */
-    User getUser(Long id);
+    UserDto getUser(Long id);
 
     /**
-     * Returns a collection all users
+     * Returns a collection all userDro
      *
-     * @return User or null if no object exists
+     * @return UserDto or null if no object exists
      */
-    Collection<User> getUsers();
+    Collection<UserDto> getUsers();
 
     /**
-     * Delete a User by id
+     * Delete a UserDto by id
      *
      * @param userId
      */

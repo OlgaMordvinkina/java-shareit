@@ -1,6 +1,6 @@
 package ru.practicum.shareit.item;
 
-import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.item.model.ItemDto;
 
 import java.util.Collection;
 
@@ -8,40 +8,42 @@ public interface ItemService {
     /**
      * Create a new Item
      *
-     * @param item
-     * @return new Item
+     * @param itemDto
+     * @param ownerId
+     * @return new ItemDto
      */
-    Item createItem(Item item);
+    ItemDto createItem(ItemDto itemDto, Long ownerId);
 
     /**
-     * Updates the film
+     * Updates the Item
      *
-     * @param item
-     * @return updated Item
+     * @param itemDto
+     * @param ownerId
+     * @return updated ItemDto
      */
-    Item updateItem(Item item);
+    ItemDto updateItem(ItemDto itemDto, Long ownerId);
 
     /**
-     * Returns a Item by id
+     * Returns a ItemDto by id
      *
      * @param id
-     * @return Item or null if no object exists
+     * @return ItemDto or null if no object exists
      */
-    Item getItem(Long id);
+    ItemDto getItem(Long id);
 
     /**
      * Returns a collection of the owner's items by owner_id
      *
      * @param ownerId
-     * @return Item or null if no object exists
+     * @return Collection<ItemDto> or null if no object exists
      */
-    Collection<Item> getItems(Long ownerId);
+    Collection<ItemDto> getItems(Long ownerId);
 
     /**
      * Returns a collection of things by keyword text
      *
      * @param text
-     * @return Item or null if no object exists
+     * @return Collection<ItemDto> or null if no object exists
      */
-    Collection<Item> getItemByText(String text);
+    Collection<ItemDto> getItemByText(String text);
 }

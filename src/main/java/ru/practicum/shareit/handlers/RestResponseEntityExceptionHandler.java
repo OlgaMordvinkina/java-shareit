@@ -43,7 +43,7 @@ public class RestResponseEntityExceptionHandler {
                 .body(objectMapper.writeValueAsString(response));
     }
 
-    @ExceptionHandler({NotFoundItemException.class})
+    @ExceptionHandler(NotFoundItemException.class)
     protected ResponseEntity<Object> handleConflict(NotFoundItemException ex) throws JsonProcessingException {
         ErrorResponse response = ErrorResponse.builder()
                 .code(HttpStatus.NOT_FOUND.value())
@@ -59,7 +59,7 @@ public class RestResponseEntityExceptionHandler {
                 .body(objectMapper.writeValueAsString(response));
     }
 
-    @ExceptionHandler({NotFoundUserException.class})
+    @ExceptionHandler(NotFoundUserException.class)
     protected ResponseEntity<Object> handleConflict(NotFoundUserException ex) throws JsonProcessingException {
         ErrorResponse response = ErrorResponse.builder()
                 .code(HttpStatus.NOT_FOUND.value())
@@ -75,7 +75,7 @@ public class RestResponseEntityExceptionHandler {
                 .body(objectMapper.writeValueAsString(response));
     }
 
-    @ExceptionHandler({RegisterException.class})
+    @ExceptionHandler(RegisterException.class)
     protected ResponseEntity<Object> handleConflict(RegisterException ex) throws JsonProcessingException {
         ErrorResponse response = ErrorResponse.builder()
                 .code(HttpStatus.CONFLICT.value())
@@ -91,7 +91,7 @@ public class RestResponseEntityExceptionHandler {
                 .body(objectMapper.writeValueAsString(response));
     }
 
-    @ExceptionHandler({AccessException.class})
+    @ExceptionHandler(AccessException.class)
     protected ResponseEntity<Object> handleConflict(AccessException ex) throws JsonProcessingException {
         ErrorResponse response = ErrorResponse.builder()
                 .code(HttpStatus.NOT_FOUND.value())
