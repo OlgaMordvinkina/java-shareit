@@ -34,13 +34,13 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
     private final BookingRepository bookingRepository;
 
-    @Transactional
     @Override
     public ItemDto createItem(ItemDto itemDto, Long ownerId) {
         User owner = userRepository.findById(ownerId).orElseThrow(() -> new NotFoundUserException(ownerId));
@@ -49,7 +49,6 @@ public class ItemServiceImpl implements ItemService {
         return saveItem("Получен запрос POST /items", "Добавлена Item: {}", item);
     }
 
-    @Transactional
     @Override
     public ItemDto updateItem(ItemDto itemDto, Long ownerId) {
         User owner = userRepository.findById(ownerId).orElseThrow(() -> new NotFoundUserException(ownerId));
@@ -129,7 +128,6 @@ public class ItemServiceImpl implements ItemService {
         return items;
     }
 
-    @Transactional
     @Override
     public CommentDto addComment(CommentDto commentDto, Long authorId, Long itemId) throws NotValidDataException {
         User author = userRepository.findById(authorId).orElseThrow(() -> new NotFoundUserException(authorId));

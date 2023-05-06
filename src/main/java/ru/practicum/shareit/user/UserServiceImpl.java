@@ -14,16 +14,15 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class UserServiceImpl implements UserService {
     private final UserRepository repository;
 
-    @Transactional
     @Override
     public UserDto createUser(UserDto userDto) {
         return saveUser(userDto, "Получен запрос POST /", "Добавлен user: {}");
     }
 
-    @Transactional
     @Override
     public UserDto updateUser(UserDto userDto) {
         User oldUser = repository.findById(userDto.getId()).orElseThrow(() -> new NotFoundUserException(userDto.getId()));
@@ -56,7 +55,6 @@ public class UserServiceImpl implements UserService {
         return users;
     }
 
-    @Transactional
     @Override
     public void deleteUser(Long userId) {
         log.info("Получен запрос DELETE /users");

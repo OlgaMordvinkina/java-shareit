@@ -21,12 +21,12 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 @Slf4j
+@Transactional
 public class BookingServiceImpl implements BookingService {
     private final BookingRepository repository;
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
 
-    @Transactional
     @Override
     public BookingFullDto createBooking(BookingDto bookingDto, Long bookerId) throws NotValidDataException {
         User user = userExist(bookerId);
@@ -37,14 +37,16 @@ public class BookingServiceImpl implements BookingService {
         if (Objects.equals(booking.getItem().getOwner().getId(), bookerId)) {
             throw new AccessException("Вы не можете арендовать свою вещь");
         }
+        log.info("Получен запрос POST /bookings");
+        log.info("Создан Booking {}", booking);
         return BookingMapper.toBookingFullDto(repository.save(booking));
     }
 
-    @Transactional
     @Override
     public BookingFullDto setStatusBooking(Long bookingId, Long userId, Boolean approved) throws NotValidDataException {
         Booking booking = bookingExist(bookingId);
         User user = userExist(userId);
+        log.info("Получен запрос PATCH /bookings/{bookingId}");
         if (!Objects.equals(user.getId(), booking.getItem().getOwner().getId())) {
             throw new AccessException("Вы не являeтесь владельцем вещи c ID: " + bookingId);
         }
@@ -53,6 +55,7 @@ public class BookingServiceImpl implements BookingService {
         }
         status:
         if (Objects.equals(booking.getStatus(), Status.WAITING)) {
+            log.info("Обновлён статус у Booking {}", booking);
             if (!approved && Objects.equals(userId, booking.getBooker().getId())) {
                 booking.setStatus(Status.CANCELED);
                 break status;
@@ -67,10 +70,12 @@ public class BookingServiceImpl implements BookingService {
     public BookingFullDto getBooking(Long bookingId, Long userId) {
         Booking booking = bookingExist(bookingId);
         User user = userExist(userId);
+        log.info("Получен запрос GET /bookings/{bookingId}");
         if (!Objects.equals(user.getId(), booking.getItem().getOwner().getId())
                 && !Objects.equals(user.getId(), booking.getBooker().getId())) {
             throw new AccessException("У вас нет доступа для просмотра бронирования с ID: " + bookingId);
         }
+        log.info("Получен Booking {}", booking);
         return BookingMapper.toBookingFullDto(booking);
     }
 
@@ -78,6 +83,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public List<BookingFullDto> getBookings(String state, Long bookerId) throws NotValidDataException {
         userExist(bookerId);
+        log.info("Получен запрос GET /bookings");
         LocalDateTime now = LocalDateTime.now();
         Sort sortDescByStart = Sort.by(Sort.Direction.DESC, "start");
         List<Booking> bookings;
@@ -103,6 +109,7 @@ public class BookingServiceImpl implements BookingService {
             default:
                 throw new NotValidDataException("Unknown state: " + state);
         }
+        log.info("Получены Bookings {}", bookings);
         return bookings.stream()
                 .map(BookingMapper::toBookingFullDto)
                 .collect(Collectors.toList());
@@ -112,6 +119,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public List<BookingFullDto> getBookingsOwner(String state, Long ownerId) throws NotValidDataException {
         userExist(ownerId);
+        log.info("Получен запрос GET /bookings");
         LocalDateTime now = LocalDateTime.now();
         Sort sortDescByStart = Sort.by(Sort.Direction.DESC, "start");
         List<Booking> bookings;
@@ -137,6 +145,7 @@ public class BookingServiceImpl implements BookingService {
             default:
                 throw new NotValidDataException("Unknown state: " + state);
         }
+        log.info("Получены Bookings {}", bookings);
         return bookings.stream()
                 .map(BookingMapper::toBookingFullDto)
                 .collect(Collectors.toList());

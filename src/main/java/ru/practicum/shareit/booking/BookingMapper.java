@@ -7,7 +7,6 @@ import ru.practicum.shareit.booking.dto.BookingShortDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
-@RequiredArgsConstructor
 public class BookingMapper {
     public static BookingFullDto toBookingFullDto(Booking booking) {
         return new BookingFullDto(
