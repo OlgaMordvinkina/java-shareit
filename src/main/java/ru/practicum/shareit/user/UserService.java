@@ -2,7 +2,7 @@ package ru.practicum.shareit.user;
 
 import ru.practicum.shareit.user.model.UserDto;
 
-import java.util.Collection;
+import java.util.List;
 
 public interface UserService {
     /**
@@ -34,7 +34,7 @@ public interface UserService {
      *
      * @return UserDto or null if no object exists
      */
-    Collection<UserDto> getUsers();
+    List<UserDto> getUsers();
 
     /**
      * Delete a UserDto by id

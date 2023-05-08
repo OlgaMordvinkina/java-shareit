@@ -9,14 +9,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.practicum.shareit.exceptions.AccessException;
-import ru.practicum.shareit.exceptions.NotFoundItemException;
-import ru.practicum.shareit.exceptions.NotFoundUserException;
-import ru.practicum.shareit.exceptions.RegisterException;
+import ru.practicum.shareit.exceptions.*;
 import ru.practicum.shareit.exceptions.model.ErrorResponse;
 import ru.practicum.shareit.exceptions.model.ErrorsDescription;
 
+import javax.persistence.NonUniqueResultException;
+import javax.validation.ConstraintViolationException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
@@ -75,6 +76,22 @@ public class RestResponseEntityExceptionHandler {
                 .body(objectMapper.writeValueAsString(response));
     }
 
+    @ExceptionHandler(NotFoundBookingException.class)
+    protected ResponseEntity<Object> handleConflict(NotFoundBookingException ex) throws JsonProcessingException {
+        ErrorResponse response = ErrorResponse.builder()
+                .code(HttpStatus.NOT_FOUND.value())
+                .errors(
+                        List.of(ErrorsDescription.builder()
+                                .message(ex.getMessage())
+                                .build())
+                ).build();
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(objectMapper.writeValueAsString(response));
+    }
+
     @ExceptionHandler(RegisterException.class)
     protected ResponseEntity<Object> handleConflict(RegisterException ex) throws JsonProcessingException {
         ErrorResponse response = ErrorResponse.builder()
@@ -103,6 +120,65 @@ public class RestResponseEntityExceptionHandler {
 
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(objectMapper.writeValueAsString(response));
+    }
+
+    @ExceptionHandler(NullPointerException.class)
+    protected ResponseEntity<Object> handleConflict(NullPointerException ex) throws JsonProcessingException {
+        ErrorResponse response = ErrorResponse.builder()
+                .code(HttpStatus.BAD_REQUEST.value())
+                .errors(
+                        List.of(ErrorsDescription.builder()
+                                .message("Не может быть null")
+                                .build())
+                ).build();
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(objectMapper.writeValueAsString(response));
+    }
+
+    @ExceptionHandler(NonUniqueResultException.class)
+    protected ResponseEntity<Object> handleConflict(NonUniqueResultException ex) throws JsonProcessingException {
+        ErrorResponse response = ErrorResponse.builder()
+                .code(HttpStatus.BAD_REQUEST.value())
+                .errors(
+                        List.of(ErrorsDescription.builder()
+                                .message(ex.getMessage())
+                                .build())
+                ).build();
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(objectMapper.writeValueAsString(response));
+    }
+
+    @ExceptionHandler(NotValidDataException.class)
+    protected ResponseEntity<Object> handleConflict(NotValidDataException ex) throws JsonProcessingException {
+        Map<String, String> errors = new HashMap<>();
+        errors.put("error", ex.getMessage());
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(objectMapper.writeValueAsString(errors));
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    protected ResponseEntity<Object> handleConflict(ConstraintViolationException ex) throws JsonProcessingException {
+        ErrorResponse response = ErrorResponse.builder()
+                .code(HttpStatus.BAD_REQUEST.value())
+                .errors(
+                        List.of(ErrorsDescription.builder()
+                                .message(ex.getMessage())
+                                .build())
+                ).build();
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(objectMapper.writeValueAsString(response));
     }

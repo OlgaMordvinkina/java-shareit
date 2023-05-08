@@ -1,8 +1,11 @@
 package ru.practicum.shareit.item;
 
+import ru.practicum.shareit.exceptions.NotValidDataException;
+import ru.practicum.shareit.item.comments.CommentDto;
 import ru.practicum.shareit.item.model.ItemDto;
+import ru.practicum.shareit.item.model.ItemFullDto;
 
-import java.util.Collection;
+import java.util.List;
 
 public interface ItemService {
     /**
@@ -26,18 +29,19 @@ public interface ItemService {
     /**
      * Returns a ItemDto by id
      *
-     * @param id
+     * @param itemId
+     * @param userId
      * @return ItemDto or null if no object exists
      */
-    ItemDto getItem(Long id);
+    ItemFullDto getItem(Long itemId, Long userId);
 
     /**
      * Returns a collection of the owner's items by owner_id
      *
      * @param ownerId
-     * @return Collection<ItemDto> or null if no object exists
+     * @return Collection<ItemFullDto> or null if no object exists
      */
-    Collection<ItemDto> getItems(Long ownerId);
+    List<ItemFullDto> getItems(Long ownerId);
 
     /**
      * Returns a collection of things by keyword text
@@ -45,5 +49,15 @@ public interface ItemService {
      * @param text
      * @return Collection<ItemDto> or null if no object exists
      */
-    Collection<ItemDto> getItemByText(String text);
+    List<ItemDto> getItemByText(String text);
+
+    /**
+     * Add comment
+     *
+     * @param commentDto
+     * @param authorId
+     * @param itemId
+     * @return an CommentDto or AccessException
+     */
+    CommentDto addComment(CommentDto commentDto, Long authorId, Long itemId) throws NotValidDataException;
 }

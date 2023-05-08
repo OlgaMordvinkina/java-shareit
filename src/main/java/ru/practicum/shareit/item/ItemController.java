@@ -1,10 +1,11 @@
 package ru.practicum.shareit.item;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.exceptions.NotValidDataException;
+import ru.practicum.shareit.item.comments.CommentDto;
 import ru.practicum.shareit.item.model.ItemDto;
+import ru.practicum.shareit.item.model.ItemFullDto;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -17,32 +18,39 @@ public class ItemController {
     private final ItemService service;
 
     @PostMapping()
-    public ResponseEntity<ItemDto> createItem(@Valid @RequestBody ItemDto itemDto,
-                                              @NotNull(message = "Owner не может быть null")
-                                              @RequestHeader("X-Sharer-User-Id") Long ownerId) {
-        return new ResponseEntity<>(service.createItem(itemDto, ownerId), HttpStatus.OK);
+    public ItemDto createItem(@Valid @RequestBody ItemDto itemDto,
+                              @NotNull(message = "Owner не может быть null")
+                              @RequestHeader("X-Sharer-User-Id") Long ownerId) {
+        return service.createItem(itemDto, ownerId);
     }
 
     @PatchMapping(value = "/{itemId}")
-    public ResponseEntity<ItemDto> updateItem(@PathVariable Long itemId,
-                                              @RequestBody ItemDto itemDto,
-                                              @RequestHeader("X-Sharer-User-Id") Long ownerId) {
+    public ItemDto updateItem(@PathVariable Long itemId,
+                              @RequestBody ItemDto itemDto,
+                              @RequestHeader("X-Sharer-User-Id") Long ownerId) {
         itemDto.setId(itemId);
-        return new ResponseEntity<>(service.updateItem(itemDto, ownerId), HttpStatus.OK);
+        return service.updateItem(itemDto, ownerId);
     }
 
     @GetMapping(value = "/{itemId}")
-    public ResponseEntity<ItemDto> getItem(@PathVariable Long itemId) {
-        return new ResponseEntity<>(service.getItem(itemId), HttpStatus.OK);
+    public ItemFullDto getItem(@PathVariable Long itemId, @RequestHeader("X-Sharer-User-Id") Long userId) {
+        return service.getItem(itemId, userId);
     }
 
     @GetMapping()
-    public ResponseEntity<Collection<ItemDto>> getItems(@RequestHeader("X-Sharer-User-Id") Long ownerId) {
-        return new ResponseEntity<>(service.getItems(ownerId), HttpStatus.OK);
+    public Collection<ItemFullDto> getItems(@RequestHeader("X-Sharer-User-Id") Long ownerId) {
+        return service.getItems(ownerId);
     }
 
     @GetMapping(value = "/search")
-    public ResponseEntity<Collection<ItemDto>> getItemByText(@RequestParam String text) {
-        return new ResponseEntity<>(service.getItemByText(text), HttpStatus.OK);
+    public Collection<ItemDto> getItemByText(@RequestParam String text) {
+        return service.getItemByText(text);
+    }
+
+    @PostMapping(value = "/{itemId}/comment")
+    public CommentDto addComment(@PathVariable Long itemId,
+                                 @RequestBody CommentDto commentDto,
+                                 @RequestHeader("X-Sharer-User-Id") Long userId) throws NotValidDataException {
+        return service.addComment(commentDto, userId, itemId);
     }
 }
