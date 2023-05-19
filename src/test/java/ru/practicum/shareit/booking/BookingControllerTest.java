@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -30,7 +29,7 @@ public class BookingControllerTest {
     private BookingService service;
     private final ObjectMapper mapper;
     private final MockMvc mvc;
-    private final String HEADER = "X-Sharer-User-Id";
+    private final String header = "X-Sharer-User-Id";
     private final LocalDateTime now = LocalDateTime.now().plusHours(2);
     private final BookingDto bookingOne = new BookingDto(1L, now, now.plusDays(2));
     private final BookingDto bookingTwo = new BookingDto(2L, now, now.plusDays(5));
@@ -43,7 +42,7 @@ public class BookingControllerTest {
 
         mvc.perform(post("/bookings")
                         .content(mapper.writeValueAsString(bookingOne))
-                        .header(HEADER, 1L)
+                        .header(header, 1L)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
@@ -56,7 +55,7 @@ public class BookingControllerTest {
 
         mvc.perform(post("/bookings")
                         .content(mapper.writeValueAsString(bookingOne))
-                        .header(HEADER, 1L)
+                        .header(header, 1L)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
@@ -68,7 +67,7 @@ public class BookingControllerTest {
         mvc.perform(post("/bookings")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .header(HEADER, 1L)
+                        .header(header, 1L)
                         .content(mapper.writeValueAsString(bookingOne)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").isNumber())
@@ -83,7 +82,7 @@ public class BookingControllerTest {
 
         mvc.perform(patch("/bookings/1?approved=true")
                         .content(mapper.writeValueAsString(bookingOne))
-                        .header(HEADER, 1L)
+                        .header(header, 1L)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").isNumber())
@@ -95,7 +94,7 @@ public class BookingControllerTest {
         when(service.getBooking(anyLong(), anyLong())).thenReturn(BookingMapper.toBookingFullDto(bookingOne));
 
         mvc.perform(get("/bookings/1")
-                        .header(HEADER, 1L)
+                        .header(header, 1L)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
@@ -115,7 +114,7 @@ public class BookingControllerTest {
         );
 
         mvc.perform(get("/bookings")
-                        .header(HEADER, 1L)
+                        .header(header, 1L)
                         .content(mapper.writeValueAsString(listDto)))
                 .andExpect(status().isOk())
                 .andReturn()
@@ -137,7 +136,7 @@ public class BookingControllerTest {
 
         mvc.perform(get("/bookings/owner")
                         .content(mapper.writeValueAsString(listDto))
-                        .header(HEADER, 1L)
+                        .header(header, 1L)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn()

@@ -45,13 +45,13 @@ public class ItemServiceTest {
     private ItemService itemService;
     private final Long id = 1L;
     private final ItemDto itemDto = new ItemDto(1L, "name", "description", true, 1L);
-    private final  Item item = ItemMapper.toItem(itemDto);
+    private final Item item = ItemMapper.toItem(itemDto);
     private final LocalDateTime now = LocalDateTime.parse("2023-05-18T09:55:05.000001");
     private final CommentDto commentDto = new CommentDto(id, "text", item, "name", now);
     private final User user = new User(id, "name", "email@mail.ru");
 
     @BeforeEach
-    void BeforeEach() {
+    void beforeEach() {
         itemService = new ItemServiceImpl(itemRepository, userRepository, commentRepository, bookingRepository);
     }
 

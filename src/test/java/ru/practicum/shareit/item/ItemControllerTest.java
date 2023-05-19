@@ -31,7 +31,7 @@ public class ItemControllerTest {
     private ItemService service;
     private final ObjectMapper mapper;
     private final MockMvc mvc;
-    private final String HEADER = "X-Sharer-User-Id";
+    private final String header = "X-Sharer-User-Id";
     private final ItemDto itemOne = new ItemDto(1L, "name", "description", true, 1L);
     private final ItemDto itemTwo = new ItemDto(2L, "name", "description", true, 2L);
 
@@ -46,7 +46,7 @@ public class ItemControllerTest {
         );
         mvc.perform(post("/items")
                         .content(mapper.writeValueAsString(item))
-                        .header(HEADER, 1L)
+                        .header(header, 1L)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
@@ -62,7 +62,7 @@ public class ItemControllerTest {
         );
         mvc.perform(post("/items")
                         .content(mapper.writeValueAsString(item))
-                        .header(HEADER, 1L)
+                        .header(header, 1L)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
@@ -72,7 +72,7 @@ public class ItemControllerTest {
         UserDto user = new UserDto(3L, "name", "");
         mvc.perform(post("/items")
                         .content(mapper.writeValueAsString(user))
-                        .header(HEADER, 1L)
+                        .header(header, 1L)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
@@ -82,7 +82,7 @@ public class ItemControllerTest {
         UserDto user = new UserDto(3L, "name", "emailUser.ru");
         mvc.perform(post("/items")
                         .content(mapper.writeValueAsString(user))
-                        .header(HEADER, 1L)
+                        .header(header, 1L)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
@@ -98,7 +98,7 @@ public class ItemControllerTest {
         );
         mvc.perform(post("/items")
                         .content(mapper.writeValueAsString(item))
-                        .header(HEADER, 1L)
+                        .header(header, 1L)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
@@ -114,7 +114,7 @@ public class ItemControllerTest {
         );
         mvc.perform(post("/items")
                         .content(mapper.writeValueAsString(item))
-                        .header(HEADER, 1L)
+                        .header(header, 1L)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
@@ -126,7 +126,7 @@ public class ItemControllerTest {
         mvc.perform(post("/items")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .header(HEADER, 1L)
+                        .header(header, 1L)
                         .content(mapper.writeValueAsString(itemOne)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
@@ -145,7 +145,7 @@ public class ItemControllerTest {
 
         mvc.perform(patch("/items/1")
                         .content(mapper.writeValueAsString(itemOne))
-                        .header(HEADER, 1L)
+                        .header(header, 1L)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").isNumber())
@@ -160,7 +160,7 @@ public class ItemControllerTest {
         when(service.getItem(anyLong(), anyLong())).thenReturn(ItemMapper.toItemFullDto(itemOne, null, null, null));
 
         mvc.perform(get("/items/1")
-                        .header(HEADER, 1L)
+                        .header(header, 1L)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
@@ -183,7 +183,7 @@ public class ItemControllerTest {
 
         mvc.perform(get("/items")
                         .content(mapper.writeValueAsString(listDto))
-                        .header(HEADER, 1L)
+                        .header(header, 1L)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn()
@@ -215,7 +215,7 @@ public class ItemControllerTest {
         mvc.perform(post("/items/1/comment")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .header(HEADER, 1L)
+                        .header(header, 1L)
                         .content(mapper.writeValueAsString(comment)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").isNumber())

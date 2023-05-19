@@ -50,7 +50,7 @@ public class BookingServiceTest {
 
 
     @BeforeEach
-    void BeforeEach() {
+    void beforeEach() {
         booking.setId(id);
         item.setOwner(user);
         service = new BookingServiceImpl(itemRepository, userRepository, bookingRepository);

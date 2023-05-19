@@ -29,7 +29,7 @@ public class UserServiceTest {
     private final UserDto userOne = new UserDto(1L, "nameUser", "email@user.ru");
 
     @BeforeEach
-    void BeforeEach() {
+    void beforeEach() {
         service = new UserServiceImpl(repository);
     }
 

@@ -5,21 +5,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import ru.practicum.shareit.exceptions.NotFoundItemException;
-import ru.practicum.shareit.exceptions.NotFoundUserException;
-import ru.practicum.shareit.item.ItemMapper;
 import ru.practicum.shareit.item.ItemRepository;
-import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.item.model.ItemDto;
-import ru.practicum.shareit.item.model.ItemFullDto;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.dto.ItemRequestReplyDto;
 import ru.practicum.shareit.user.UserRepository;
-import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -28,7 +20,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -48,7 +41,7 @@ public class RequestServiceTest {
     private final ItemRequestReplyDto requestReplyDto = ItemRequestMapper.itemRequestReplyDto(requestDto, new ArrayList<>());
 
     @BeforeEach
-    void BeforeEach() {
+    void beforeEach() {
         service = new ItemRequestServiceImpl(itemRepository, userRepository, requestRepository);
     }
 
