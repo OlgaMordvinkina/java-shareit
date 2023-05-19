@@ -2,6 +2,8 @@ package ru.practicum.shareit.item;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +29,6 @@ import ru.practicum.shareit.user.model.User;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -46,7 +47,8 @@ public class ItemServiceImpl implements ItemService {
         User owner = userRepository.findById(ownerId).orElseThrow(() -> new NotFoundUserException(ownerId));
         Item item = ItemMapper.toItem(itemDto);
         item.setOwner(owner);
-        return saveItem("Получен запрос POST /items", "Добавлена Item: {}", item);
+        log.info("Добавлена Item: {}", item);
+        return ItemMapper.toItemDto(itemRepository.save(item));
     }
 
     @Override
@@ -68,8 +70,8 @@ public class ItemServiceImpl implements ItemService {
         if (updateItem.getAvailable() != null) {
             oldItem.setAvailable(updateItem.getAvailable());
         }
-
-        return saveItem("Получен запрос PUT /items", "Обновлена Item: {}", oldItem);
+        log.info("Обновлена Item: {}", oldItem);
+        return ItemMapper.toItemDto(itemRepository.save(oldItem));
     }
 
     @Transactional(readOnly = true)
@@ -92,10 +94,9 @@ public class ItemServiceImpl implements ItemService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<ItemFullDto> getItems(Long ownerId) {
-        log.info("Получен запрос GET /items");
-        Sort sortDescById = Sort.by(Sort.Direction.ASC, "id");
-        List<ItemFullDto> items = itemRepository.findAllByOwnerId(ownerId, sortDescById).stream()
+    public List<ItemFullDto> getItems(int from, int size, Long ownerId) {
+        Pageable pages = PageRequest.of(from / size, size, Sort.by(Sort.Direction.ASC, "id"));
+        List<ItemFullDto> items = itemRepository.findAllByOwnerId(ownerId, pages).stream()
                 .map(it -> ItemMapper.toItemFullDto(it,
                                 (Objects.equals(it.getOwner().getId(), ownerId) ? findLast(it.getId()) : null),
                                 (Objects.equals(it.getOwner().getId(), ownerId) ? findNext(it.getId()) : null),
@@ -112,15 +113,12 @@ public class ItemServiceImpl implements ItemService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<ItemDto> getItemByText(String text) {
+    public List<ItemDto> getItemByText(int from, int size, String text) {
         List<ItemDto> items = new ArrayList<>();
-        log.info("Получен запрос GET /items");
+        Pageable pages = PageRequest.of(from / size, size, Sort.by(Sort.Direction.ASC, "id"));
+
         if (!Objects.equals(text, "")) {
-            String finalText = text.toLowerCase(Locale.ENGLISH);
-            items = itemRepository.findAll().stream()
-                    .filter(Item::getAvailable)
-                    .filter(it -> it.getName().toLowerCase(Locale.ENGLISH).contains(finalText) ||
-                            it.getDescription().toLowerCase(Locale.ENGLISH).contains(finalText))
+            items = itemRepository.findAllByNameContainsIgnoreCaseOrDescriptionContainsIgnoreCaseAndAvailableIsTrue(text, text, pages).stream()
                     .map(ItemMapper::toItemDto)
                     .collect(Collectors.toList());
         }
@@ -143,7 +141,6 @@ public class ItemServiceImpl implements ItemService {
         commentDto.setAuthorName(author.getName());
         commentDto.setCreated(LocalDateTime.now());
         Comment comment = CommentMapper.toComment(commentDto, author);
-        log.info("Получен запрос POST /items/{itemId}/comment");
         log.info("Добавлен Comment: {}", comment);
         return CommentMapper.toCommentDto(commentRepository.save(comment));
     }
@@ -160,9 +157,4 @@ public class ItemServiceImpl implements ItemService {
         return (last != null && last.getStatus() == Status.APPROVED ? BookingMapper.toBookingShortDto(last) : null);
     }
 
-    private ItemDto saveItem(String logMethod, String logOperation, Item item) {
-        log.info(logMethod);
-        log.info(logOperation, item);
-        return ItemMapper.toItemDto(itemRepository.save(item));
-    }
 }

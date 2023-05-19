@@ -41,7 +41,7 @@ public interface ItemService {
      * @param ownerId
      * @return Collection<ItemFullDto> or null if no object exists
      */
-    List<ItemFullDto> getItems(Long ownerId);
+    List<ItemFullDto> getItems(int from, int size, Long ownerId);
 
     /**
      * Returns a collection of things by keyword text
@@ -49,7 +49,7 @@ public interface ItemService {
      * @param text
      * @return Collection<ItemDto> or null if no object exists
      */
-    List<ItemDto> getItemByText(String text);
+    List<ItemDto> getItemByText(int from, int size, String text);
 
     /**
      * Add comment

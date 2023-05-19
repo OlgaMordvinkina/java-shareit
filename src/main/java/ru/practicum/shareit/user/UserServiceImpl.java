@@ -20,7 +20,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto createUser(UserDto userDto) {
-        return saveUser(userDto, "Получен запрос POST /", "Добавлен user: {}");
+        User user = UserMapper.toUser(userDto);
+        log.info("Добавлен user: {}", user);
+        return UserMapper.toUserDto(repository.save(user));
     }
 
     @Override
@@ -33,7 +35,8 @@ public class UserServiceImpl implements UserService {
         if (userDto.getEmail() != null) {
             oldUser.setEmail(userDto.getEmail());
         }
-        return saveUser(UserMapper.toUserDto(oldUser), "Получен запрос PUT /users", "Обновлен user: {}");
+        log.info("Обновлен user: {}", oldUser);
+        return UserMapper.toUserDto(repository.save(oldUser));
     }
 
     @Transactional(readOnly = true)
@@ -47,7 +50,6 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     @Override
     public List<UserDto> getUsers() {
-        log.info("Получен запрос GET /users");
         List<UserDto> users = repository.findAll().stream()
                 .map(UserMapper::toUserDto)
                 .collect(Collectors.toList());
@@ -57,15 +59,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(Long userId) {
-        log.info("Получен запрос DELETE /users");
         log.info("Удалён user: {}", repository.findById(userId));
         repository.deleteById(userId);
-    }
-
-    private UserDto saveUser(UserDto userDto, String logMethod, String logOperation) {
-        User user = UserMapper.toUser(userDto);
-        log.info(logMethod);
-        log.info(logOperation, user);
-        return UserMapper.toUserDto(repository.save(user));
     }
 }

@@ -18,6 +18,17 @@ public class BookingMapper {
         );
     }
 
+    public static BookingFullDto toBookingFullDto(BookingDto booking) {
+        return new BookingFullDto(
+                booking.getItemId(),
+                booking.getStart(),
+                booking.getEnd(),
+                new Item(),
+                new User(),
+                Status.WAITING
+        );
+    }
+
     public static BookingFullDto toBookingFullDto(Booking booking, Item item, User booker) {
         return new BookingFullDto(
                 booking.getId(),

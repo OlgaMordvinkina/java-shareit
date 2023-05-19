@@ -15,7 +15,18 @@ public class ItemMapper {
                 item.getId(),
                 item.getName(),
                 item.getDescription(),
-                item.getAvailable()
+                item.getAvailable(),
+                item.getRequestId()
+        );
+    }
+
+    public static ItemDto toItemDto(ItemFullDto item) {
+        return new ItemDto(
+                item.getId(),
+                item.getName(),
+                item.getDescription(),
+                item.getAvailable(),
+                null
         );
     }
 
@@ -25,11 +36,24 @@ public class ItemMapper {
                 itemDto.getName(),
                 itemDto.getDescription(),
                 new User(),
-                itemDto.getAvailable()
+                itemDto.getAvailable(),
+                itemDto.getRequestId()
         );
     }
 
     public static ItemFullDto toItemFullDto(Item item, BookingShortDto last, BookingShortDto next, List<CommentDto> comments) {
+        return new ItemFullDto(
+                item.getId(),
+                item.getName(),
+                item.getDescription(),
+                item.getAvailable(),
+                last,
+                next,
+                comments
+        );
+    }
+
+    public static ItemFullDto toItemFullDto(ItemDto item, BookingShortDto last, BookingShortDto next, List<CommentDto> comments) {
         return new ItemFullDto(
                 item.getId(),
                 item.getName(),
