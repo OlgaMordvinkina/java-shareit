@@ -29,7 +29,7 @@ public class ItemRequestControllerTest {
     private ItemRequestService service;
     private final ObjectMapper mapper;
     private final MockMvc mvc;
-    private final String HEADER = "X-Sharer-User-Id";
+    private final String header = "X-Sharer-User-Id";
     private final ItemRequestDto requestOne = new ItemRequestDto(1L, "description", 1L, LocalDateTime.now());
     private final ItemRequestDto requestTwo = new ItemRequestDto(1L, "description", 1L, LocalDateTime.now());
 
@@ -41,7 +41,7 @@ public class ItemRequestControllerTest {
         mvc.perform(post("/requests")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .header(HEADER, 1L)
+                        .header(header, 1L)
                         .content(mapper.writeValueAsString(requestOne)))
                 .andExpect(status().isBadRequest());
     }
@@ -53,7 +53,7 @@ public class ItemRequestControllerTest {
         mvc.perform(post("/requests")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .header(HEADER, 1L)
+                        .header(header, 1L)
                         .content(mapper.writeValueAsString(requestOne)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
@@ -75,7 +75,7 @@ public class ItemRequestControllerTest {
 
         mvc.perform(get("/requests")
                         .content(mapper.writeValueAsString(listDto))
-                        .header(HEADER, 1L)
+                        .header(header, 1L)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn()
@@ -97,7 +97,7 @@ public class ItemRequestControllerTest {
 
         mvc.perform(get("/requests/all")
                         .content(mapper.writeValueAsString(listDto))
-                        .header(HEADER, 1L)
+                        .header(header, 1L)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn()
@@ -110,7 +110,7 @@ public class ItemRequestControllerTest {
         when(service.getRequest(anyLong(), anyLong())).thenReturn(ItemRequestMapper.itemRequestReplyDto(requestOne, null));
 
         mvc.perform(get("/requests/1")
-                        .header(HEADER, 1L)
+                        .header(header, 1L)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
