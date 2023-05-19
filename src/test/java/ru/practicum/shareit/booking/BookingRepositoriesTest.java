@@ -33,7 +33,7 @@ public class BookingRepositoriesTest {
     private final Page<Booking> bookings = new PageImpl<>(Collections.singletonList(booking));
 
     @BeforeEach
-    void BeforeEach() {
+    void beforeEach() {
         booking.setId(id);
     }
 

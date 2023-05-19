@@ -18,7 +18,7 @@ class ItemRequestDtoTest {
     private JacksonTester<ItemRequestDto> json;
 
     @Test
-    void convert() throws IOException {
+    void testSerialize() throws IOException {
         ItemRequestDto itemRequestDto = new ItemRequestDto(1L, "description", 1L, LocalDateTime.now());
         JsonContent<ItemRequestDto> result = json.write(itemRequestDto);
 
