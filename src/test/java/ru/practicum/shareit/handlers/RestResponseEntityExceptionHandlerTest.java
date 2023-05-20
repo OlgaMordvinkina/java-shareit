@@ -22,7 +22,7 @@ public class RestResponseEntityExceptionHandlerTest {
     private final int conflict = 409;
 
     @Test
-    public void NotFoundItemExceptionTest() throws JsonProcessingException {
+    public void notFoundItemExceptionTest() throws JsonProcessingException {
         ResponseEntity<Object> response = handler.handleConflict(new NotFoundItemException(id));
 
         assertNotNull(response);
@@ -30,7 +30,7 @@ public class RestResponseEntityExceptionHandlerTest {
     }
 
     @Test
-    public void NotFoundUserExceptionTest() throws JsonProcessingException {
+    public void notFoundUserExceptionTest() throws JsonProcessingException {
         ResponseEntity<Object> response = handler.handleConflict(new NotFoundUserException(id));
 
         assertNotNull(response);
@@ -38,7 +38,7 @@ public class RestResponseEntityExceptionHandlerTest {
     }
 
     @Test
-    public void NotFoundBookingExceptionTest() throws JsonProcessingException {
+    public void notFoundBookingExceptionTest() throws JsonProcessingException {
         ResponseEntity<Object> response = handler.handleConflict(new NotFoundBookingException(id));
 
         assertNotNull(response);
@@ -46,7 +46,7 @@ public class RestResponseEntityExceptionHandlerTest {
     }
 
     @Test
-    public void NotFoundItemRequestExceptionTest() throws JsonProcessingException {
+    public void notFoundItemRequestExceptionTest() throws JsonProcessingException {
         ResponseEntity<Object> response = handler.handleConflict(new NotFoundItemRequestException(id));
 
         assertNotNull(response);
@@ -54,7 +54,7 @@ public class RestResponseEntityExceptionHandlerTest {
     }
 
     @Test
-    public void RegisterExceptionTest() throws JsonProcessingException {
+    public void registerExceptionTest() throws JsonProcessingException {
         ResponseEntity<Object> response = handler.handleConflict(new RegisterException(""));
 
         assertNotNull(response);
@@ -62,7 +62,7 @@ public class RestResponseEntityExceptionHandlerTest {
     }
 
     @Test
-    public void AccessExceptionTest() throws JsonProcessingException {
+    public void accessExceptionTest() throws JsonProcessingException {
         ResponseEntity<Object> response = handler.handleConflict(new AccessException(""));
 
         assertNotNull(response);
@@ -70,7 +70,7 @@ public class RestResponseEntityExceptionHandlerTest {
     }
 
     @Test
-    public void NullPointerExceptionTest() throws JsonProcessingException {
+    public void nullPointerExceptionTest() throws JsonProcessingException {
         ResponseEntity<Object> response = handler.handleConflict(new NullPointerException());
 
         assertNotNull(response);
@@ -78,7 +78,7 @@ public class RestResponseEntityExceptionHandlerTest {
     }
 
     @Test
-    public void NonUniqueResultExceptionTest() throws JsonProcessingException {
+    public void nonUniqueResultExceptionTest() throws JsonProcessingException {
         ResponseEntity<Object> response = handler.handleConflict(new NonUniqueResultException());
 
         assertNotNull(response);
@@ -86,7 +86,7 @@ public class RestResponseEntityExceptionHandlerTest {
     }
 
     @Test
-    public void NotValidDataExceptionTest() throws JsonProcessingException {
+    public void notValidDataExceptionTest() throws JsonProcessingException {
         ResponseEntity<Object> response = handler.handleConflict(new NotValidDataException(""));
 
         assertNotNull(response);
@@ -94,7 +94,7 @@ public class RestResponseEntityExceptionHandlerTest {
     }
 
     @Test
-    public void ConstraintViolationExceptionTest() throws JsonProcessingException {
+    public void constraintViolationExceptionTest() throws JsonProcessingException {
         ResponseEntity<Object> response = handler.handleConflict(new ConstraintViolationException(new HashSet<>()));
 
         assertNotNull(response);
@@ -102,7 +102,7 @@ public class RestResponseEntityExceptionHandlerTest {
     }
 
     @Test
-    public void IllegalArgumentExceptionTest() throws JsonProcessingException {
+    public void illegalArgumentExceptionTest() throws JsonProcessingException {
         ResponseEntity<Object> response = handler.handleConflict(new IllegalArgumentException());
 
         assertNotNull(response);
