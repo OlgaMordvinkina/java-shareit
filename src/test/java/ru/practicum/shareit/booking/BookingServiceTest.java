@@ -99,7 +99,7 @@ public class BookingServiceTest {
         when(bookingRepository.save(any())).thenReturn(booking);
 
         BookingFullDto expectedBooking = service.setStatusBooking(id, id, true);
-        BookingFullDto bookingFullDto = BookingMapper.toBookingFullDto(booking, item, new User());
+        BookingFullDto bookingFullDto = BookingMapper.toBookingFullDto(booking, item, user);
 
         assertEquals(bookingFullDto, expectedBooking);
         verify(bookingRepository).save(any());
@@ -129,7 +129,7 @@ public class BookingServiceTest {
         when(bookingRepository.save(any())).thenReturn(booking);
 
         BookingFullDto expectedBooking = service.setStatusBooking(id, id, false);
-        BookingFullDto bookingFullDto = BookingMapper.toBookingFullDto(booking, item, new User());
+        BookingFullDto bookingFullDto = BookingMapper.toBookingFullDto(booking, item, user);
 
 
         assertEquals(bookingFullDto, expectedBooking);
