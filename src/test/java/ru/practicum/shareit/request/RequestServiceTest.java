@@ -38,7 +38,7 @@ public class RequestServiceTest {
     private final LocalDateTime now = LocalDateTime.parse("2023-05-18T09:55:05.000001");
     private final ItemRequestDto requestDto = new ItemRequestDto(id, "name", id, now);
     private final ItemRequest request = ItemRequestMapper.toItemRequest(requestDto);
-    private final ItemRequestReplyDto requestReplyDto = ItemRequestMapper.itemRequestReplyDto(requestDto, new ArrayList<>());
+    private final ItemRequestReplyDto requestReplyDto = ItemRequestMapper.toItemRequestReplyDto(requestDto, new ArrayList<>());
 
     @BeforeEach
     void beforeEach() {

@@ -45,7 +45,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
 
         Sort sortDescByCreated = Sort.by(Sort.Direction.DESC, "created");
         List<ItemRequestReplyDto> requests = requestRepository.findItemRequestsByRequesterId(userId, sortDescByCreated).stream()
-                .map(it -> ItemRequestMapper.itemRequestReplyDto(it, getItemByRequestId(it.getRequesterId())))
+                .map(it -> ItemRequestMapper.toItemRequestReplyDto(it, getItemByRequestId(it.getRequesterId())))
                 .collect(Collectors.toList());
 
         log.info("ItemRequest в списке {}", requests.size());
@@ -58,7 +58,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
 
         Pageable pages = PageRequest.of(from / size, size);
         List<ItemRequestReplyDto> requests = requestRepository.findItemRequestsByRequesterIdNotOrderByCreatedDesc(userId, pages).stream()
-                .map(it -> ItemRequestMapper.itemRequestReplyDto(it, getItemByRequestId(it.getRequesterId())))
+                .map(it -> ItemRequestMapper.toItemRequestReplyDto(it, getItemByRequestId(it.getRequesterId())))
                 .collect(Collectors.toList());
 
         log.info("ItemRequest в списке {}", requests.size());
@@ -70,7 +70,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
         userExists(userId);
         ItemRequest request = requestRepository.findById(requestId).orElseThrow(() -> new NotFoundItemRequestException(requestId));
         log.info("Получен ItemRequest {}", request);
-        return ItemRequestMapper.itemRequestReplyDto(request, getItemByRequestId(request.getRequesterId()));
+        return ItemRequestMapper.toItemRequestReplyDto(request, getItemByRequestId(request.getRequesterId()));
     }
 
     private List<ItemDto> getItemByRequestId(Long userId) {

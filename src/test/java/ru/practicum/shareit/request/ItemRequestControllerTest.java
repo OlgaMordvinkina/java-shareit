@@ -69,7 +69,7 @@ public class ItemRequestControllerTest {
 
         when(service.getRequestsOwn(anyLong())).thenReturn(
                 listDto.stream()
-                        .map(it -> ItemRequestMapper.itemRequestReplyDto(it, null))
+                        .map(it -> ItemRequestMapper.toItemRequestReplyDto(it, null))
                         .collect(Collectors.toList())
         );
 
@@ -91,7 +91,7 @@ public class ItemRequestControllerTest {
 
         when(service.getRequestsOtherUser(anyInt(), anyInt(), anyLong())).thenReturn(
                 listDto.stream()
-                        .map(it -> ItemRequestMapper.itemRequestReplyDto(it, null))
+                        .map(it -> ItemRequestMapper.toItemRequestReplyDto(it, null))
                         .collect(Collectors.toList())
         );
 
@@ -107,7 +107,7 @@ public class ItemRequestControllerTest {
 
     @Test
     void getRequestTest() throws Exception {
-        when(service.getRequest(anyLong(), anyLong())).thenReturn(ItemRequestMapper.itemRequestReplyDto(requestOne, null));
+        when(service.getRequest(anyLong(), anyLong())).thenReturn(ItemRequestMapper.toItemRequestReplyDto(requestOne, null));
 
         mvc.perform(get("/requests/1")
                         .header(header, 1L)

@@ -25,7 +25,7 @@ public class ItemRequestMapper {
         );
     }
 
-    public static ItemRequestReplyDto itemRequestReplyDto(ItemRequest request, List<ItemDto> items) {
+    public static ItemRequestReplyDto toItemRequestReplyDto(ItemRequest request, List<ItemDto> items) {
         return new ItemRequestReplyDto(
                 request.getId(),
                 request.getDescription(),
@@ -34,7 +34,7 @@ public class ItemRequestMapper {
         );
     }
 
-    public static ItemRequestReplyDto itemRequestReplyDto(ItemRequestDto request, List<ItemDto> items) {
+    public static ItemRequestReplyDto toItemRequestReplyDto(ItemRequestDto request, List<ItemDto> items) {
         return new ItemRequestReplyDto(
                 request.getId(),
                 request.getDescription(),

@@ -41,7 +41,10 @@ public class ItemMapper {
         );
     }
 
-    public static ItemFullDto toItemFullDto(Item item, BookingShortDto last, BookingShortDto next, List<CommentDto> comments) {
+    public static ItemFullDto toItemFullDto(Item item,
+                                            BookingShortDto last,
+                                            BookingShortDto next,
+                                            List<CommentDto> comments) {
         return new ItemFullDto(
                 item.getId(),
                 item.getName(),
@@ -53,7 +56,10 @@ public class ItemMapper {
         );
     }
 
-    public static ItemFullDto toItemFullDto(ItemDto item, BookingShortDto last, BookingShortDto next, List<CommentDto> comments) {
+    public static ItemFullDto toItemFullDto(ItemDto item,
+                                            BookingShortDto last,
+                                            BookingShortDto next,
+                                            List<CommentDto> comments) {
         return new ItemFullDto(
                 item.getId(),
                 item.getName(),
