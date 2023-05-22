@@ -22,6 +22,7 @@ import ru.practicum.shareit.item.model.ItemFullDto;
 import ru.practicum.shareit.user.UserRepository;
 import ru.practicum.shareit.user.model.User;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +47,7 @@ public class ItemServiceTest {
     private final Long id = 1L;
     private final ItemDto itemDto = new ItemDto(1L, "name", "description", true, 1L);
     private final Item item = ItemMapper.toItem(itemDto);
-    private final LocalDateTime now = LocalDateTime.parse("2023-05-18T09:55:05.000001");
+    private final LocalDateTime now = LocalDateTime.parse(LocalDate.now() + "T09:55:05.000001");
     private final CommentDto commentDto = new CommentDto(id, "text", item, "name", now);
     private final User user = new User(id, "name", "email@mail.ru");
 

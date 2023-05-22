@@ -30,13 +30,13 @@ public class ItemRequestControllerTest {
     private final ObjectMapper mapper;
     private final MockMvc mvc;
     private final String header = "X-Sharer-User-Id";
-    private final ItemRequestDto requestOne = new ItemRequestDto(1L, "description", 1L, LocalDateTime.now());
-    private final ItemRequestDto requestTwo = new ItemRequestDto(1L, "description", 1L, LocalDateTime.now());
+    private final ItemRequestDto requestOne = new ItemRequestDto(1L, "description", LocalDateTime.now());
+    private final ItemRequestDto requestTwo = new ItemRequestDto(1L, "description", LocalDateTime.now());
 
     @Test
     void createRequestEmptyDescriptionTest() throws Exception {
         requestOne.setDescription("");
-        when(service.createRequest(any())).thenReturn(requestOne);
+        when(service.createRequest(any(), anyLong())).thenReturn(requestOne);
 
         mvc.perform(post("/requests")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -48,7 +48,7 @@ public class ItemRequestControllerTest {
 
     @Test
     void createRequestTest() throws Exception {
-        when(service.createRequest(any())).thenReturn(requestOne);
+        when(service.createRequest(any(), anyLong())).thenReturn(requestOne);
 
         mvc.perform(post("/requests")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -58,7 +58,7 @@ public class ItemRequestControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
                 .andExpect(jsonPath("$.description").value("description"))
-                .andExpect(jsonPath("$.requesterId").value(1L));
+                .andExpect(jsonPath("$.created").hasJsonPath());
     }
 
     @Test

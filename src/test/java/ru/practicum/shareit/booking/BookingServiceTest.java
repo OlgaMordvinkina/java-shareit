@@ -20,6 +20,7 @@ import ru.practicum.shareit.user.UserRepository;
 import ru.practicum.shareit.user.model.User;
 
 import javax.xml.bind.ValidationException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -41,7 +42,7 @@ public class BookingServiceTest {
     private UserRepository userRepository;
     private BookingService service;
     private final Long id = 1L;
-    private final LocalDateTime now = LocalDateTime.parse("2023-05-18T09:55:05.000001");
+    private final LocalDateTime now = LocalDateTime.parse(LocalDate.now() + "T09:55:05.000001");
     private final BookingDto bookingDto = new BookingDto(1L, now.minusDays(5), now.minusDays(2));
     private final ItemDto itemDto = new ItemDto(1L, "name", "description", true, 1L);
     private final Item item = ItemMapper.toItem(itemDto);

@@ -19,14 +19,14 @@ class ItemRequestDtoTest {
 
     @Test
     void testSerialize() throws IOException {
-        ItemRequestDto itemRequestDto = new ItemRequestDto(1L, "description", 1L, LocalDateTime.now());
+        ItemRequestDto itemRequestDto = new ItemRequestDto(1L, "description", LocalDateTime.now());
         JsonContent<ItemRequestDto> result = json.write(itemRequestDto);
 
         assertThat(result).hasJsonPath("$.id");
         assertThat(result).hasJsonPath("$.description");
-        assertThat(result).hasJsonPath("$.requesterId");
+        assertThat(result).hasJsonPath("$.created");
         assertThat(result).extractingJsonPathValue("$.id").isEqualTo(1);
         assertThat(result).extractingJsonPathStringValue("$.description").isEqualTo("description");
-        assertThat(result).extractingJsonPathValue("$.requesterId").isEqualTo(1);
+        assertThat(result).hasJsonPathValue("$.created");
     }
 }

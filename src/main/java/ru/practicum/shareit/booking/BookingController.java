@@ -9,7 +9,8 @@ import ru.practicum.shareit.booking.dto.BookingFullDto;
 import ru.practicum.shareit.exceptions.NotValidDataException;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import javax.xml.bind.ValidationException;
 import java.util.List;
 
@@ -46,8 +47,8 @@ public class BookingController {
     @GetMapping()
     public List<BookingFullDto> getBookings(@RequestParam(defaultValue = "ALL") String state,
                                             @RequestHeader("X-Sharer-User-Id") Long bookerId,
-                                            @RequestParam(defaultValue = "0") @Min(value = 0) int from,
-                                            @RequestParam(defaultValue = "10") @Min(value = 1) int size) throws ValidationException {
+                                            @RequestParam(defaultValue = "0") @PositiveOrZero int from,
+                                            @RequestParam(defaultValue = "10") @Positive int size) throws ValidationException {
         log.info("Получен запрос GET /bookings");
         return service.getBookings(state, bookerId, from, size);
     }
@@ -55,8 +56,8 @@ public class BookingController {
     @GetMapping(value = "/owner")
     public List<BookingFullDto> getBookingsOwner(@RequestParam(defaultValue = "ALL") String state,
                                                  @RequestHeader("X-Sharer-User-Id") Long bookerId,
-                                                 @RequestParam(defaultValue = "0") @Min(value = 0) int from,
-                                                 @RequestParam(defaultValue = "10") @Min(value = 1) int size) throws NotValidDataException {
+                                                 @RequestParam(defaultValue = "0") @PositiveOrZero int from,
+                                                 @RequestParam(defaultValue = "10") @Positive int size) throws NotValidDataException {
         log.info("Получен запрос GET /bookings");
         return service.getBookingsOwner(state, bookerId, from, size);
     }

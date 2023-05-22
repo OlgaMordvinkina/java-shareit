@@ -11,7 +11,6 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Builder
 @ToString
-@EqualsAndHashCode
 @Entity
 @Table(name = "items")
 public class Item {

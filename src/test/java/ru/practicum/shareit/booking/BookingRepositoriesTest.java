@@ -13,6 +13,7 @@ import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,7 +28,7 @@ public class BookingRepositoriesTest {
     @Mock
     private BookingRepository bookingRepository;
     private final Long id = 1L;
-    private final LocalDateTime now = LocalDateTime.parse("2023-05-18T09:55:05.000001");
+    private final LocalDateTime now = LocalDateTime.parse(LocalDate.now() + "T09:55:05.000001");
     private final BookingDto bookingDto = new BookingDto(1L, now.minusDays(5), now.minusDays(2));
     private final Booking booking = BookingMapper.toBooking(bookingDto, new Item(), new User());
     private final Page<Booking> bookings = new PageImpl<>(Collections.singletonList(booking));

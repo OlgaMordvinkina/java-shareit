@@ -10,8 +10,9 @@ import ru.practicum.shareit.item.model.ItemDto;
 import ru.practicum.shareit.item.model.ItemFullDto;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.Collection;
 
 @RestController
@@ -47,16 +48,16 @@ public class ItemController {
 
     @GetMapping()
     public Collection<ItemFullDto> getItems(@RequestHeader("X-Sharer-User-Id") Long ownerId,
-                                            @RequestParam(defaultValue = "0") @Min(value = 0) int from,
-                                            @RequestParam(defaultValue = "10") @Min(value = 1) int size) {
+                                            @RequestParam(defaultValue = "0") @PositiveOrZero int from,
+                                            @RequestParam(defaultValue = "10") @Positive int size) {
         log.info("Получен запрос GET /items");
         return service.getItems(from, size, ownerId);
     }
 
     @GetMapping(value = "/search")
     public Collection<ItemDto> getItemByText(@RequestParam String text,
-                                             @RequestParam(defaultValue = "0") @Min(value = 0) int from,
-                                             @RequestParam(defaultValue = "10") @Min(value = 1) int size) {
+                                             @RequestParam(defaultValue = "0") @PositiveOrZero int from,
+                                             @RequestParam(defaultValue = "10") @Positive int size) {
         log.info("Получен запрос GET /items/search");
         return service.getItemByText(from, size, text);
     }

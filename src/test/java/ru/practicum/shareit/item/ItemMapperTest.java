@@ -7,13 +7,14 @@ import ru.practicum.shareit.item.model.ItemDto;
 import ru.practicum.shareit.item.model.ItemFullDto;
 import ru.practicum.shareit.user.model.User;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ItemMapperTest {
-    private final LocalDateTime now = LocalDateTime.parse("2023-05-18T09:55:05.000001");
+    private final LocalDateTime now = LocalDateTime.parse(LocalDate.now() + "T09:55:05.000001");
     private final User user = new User(1L, "name", "email@mail.ru");
     private final Item item = new Item(1L, "name", "description", user, true, 1L);
     private final BookingShortDto booking = new BookingShortDto(1L, 1L, now, now);
@@ -40,7 +41,7 @@ public class ItemMapperTest {
         Item expectedItem = ItemMapper.toItem(itemDto);
         expectedItem.setOwner(user);
 
-        assertEquals(item, expectedItem);
+        assertEquals(item.toString(), expectedItem.toString());
     }
 
     @Test

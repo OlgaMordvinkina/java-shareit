@@ -31,10 +31,10 @@ public class ItemRequestServiceImpl implements ItemRequestService {
 
     @Override
     @Transactional
-    public ItemRequestDto createRequest(ItemRequestDto requestDto) {
-        userExists(requestDto.getRequesterId());
+    public ItemRequestDto createRequest(ItemRequestDto requestDto, Long requesterId) {
+        userExists(requesterId);
         requestDto.setCreated(LocalDateTime.now());
-        ItemRequest request = ItemRequestMapper.toItemRequest(requestDto);
+        ItemRequest request = ItemRequestMapper.toItemRequest(requestDto, requesterId);
         log.info("Создан ItemRequest: {}", request);
         return ItemRequestMapper.toItemRequestDto(requestRepository.save(request));
     }

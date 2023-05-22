@@ -7,13 +7,14 @@ import ru.practicum.shareit.booking.dto.BookingShortDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 public class BookingMapperTest {
-    private final LocalDateTime now = LocalDateTime.parse("2023-05-18T09:55:05.000001");
+    private final LocalDateTime now = LocalDateTime.parse(LocalDate.now() + "T09:55:05.000001");
     private final User user = new User(1L, "name", "email@mail.ru");
     private final Item item = new Item(1L, "name", "description", user, true, 1L);
     private final Booking booking = new Booking(1L, now, now, item, user, Status.WAITING);
@@ -49,7 +50,7 @@ public class BookingMapperTest {
         Booking expectedBooking = BookingMapper.toBooking(bookingDto, item, user);
         expectedBooking.setId(1L);
 
-        assertEquals(booking, expectedBooking);
+        assertEquals(booking.toString(), expectedBooking.toString());
     }
 
     @Test

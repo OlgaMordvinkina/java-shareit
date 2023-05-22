@@ -4,15 +4,17 @@ import org.junit.jupiter.api.Test;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.dto.ItemRequestReplyDto;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ItemRequestMapperTest {
-    private final LocalDateTime now = LocalDateTime.parse("2023-05-18T09:55:05.000001");
-    private final ItemRequest request = new ItemRequest(1L, "description", 1L, now);
-    private final ItemRequestDto requestDto = new ItemRequestDto(1L, "description", 1L, now);
+    private final Long requesterId = 1L;
+    private final LocalDateTime now = LocalDateTime.parse(LocalDate.now() + "T09:55:05.000001");
+    private final ItemRequest request = new ItemRequest(1L, "description", requesterId, now);
+    private final ItemRequestDto requestDto = new ItemRequestDto(1L, "description", now);
     private final ItemRequestReplyDto requestReplyDto = new ItemRequestReplyDto(1L, "description", now, new ArrayList<>());
 
 
@@ -25,9 +27,9 @@ public class ItemRequestMapperTest {
 
     @Test
     void toItemRequest_FromItemRequestDto_returnedItemRequest() {
-        ItemRequest expectedRequest = ItemRequestMapper.toItemRequest(requestDto);
+        ItemRequest expectedRequest = ItemRequestMapper.toItemRequest(requestDto, requesterId);
 
-        assertEquals(request, expectedRequest);
+        assertEquals(request.toString(), expectedRequest.toString());
     }
 
     @Test

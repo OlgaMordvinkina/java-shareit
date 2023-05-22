@@ -8,7 +8,8 @@ import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.dto.ItemRequestReplyDto;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @RestController
@@ -23,8 +24,7 @@ public class ItemRequestController {
     public ItemRequestDto createRequest(@Valid @RequestBody ItemRequestDto requestDto,
                                         @RequestHeader("X-Sharer-User-Id") Long userId) {
         log.info("Получен запрос POST /requests");
-        requestDto.setRequesterId(userId);
-        return service.createRequest(requestDto);
+        return service.createRequest(requestDto, userId);
     }
 
     @GetMapping
@@ -35,8 +35,8 @@ public class ItemRequestController {
 
     @GetMapping("/all")
     List<ItemRequestReplyDto> getRequestsOtherUser(@RequestHeader("X-Sharer-User-Id") Long userId,
-                                                   @RequestParam(defaultValue = "0") @Min(value = 0) int from,
-                                                   @RequestParam(defaultValue = "10") @Min(value = 1) int size) {
+                                                   @RequestParam(defaultValue = "0") @PositiveOrZero int from,
+                                                   @RequestParam(defaultValue = "10") @Positive int size) {
         log.info("Получен запрос GET /requests/all");
         return service.getRequestsOtherUser(from, size, userId);
     }

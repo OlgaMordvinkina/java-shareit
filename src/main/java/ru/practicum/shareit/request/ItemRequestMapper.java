@@ -11,16 +11,15 @@ public class ItemRequestMapper {
         return new ItemRequestDto(
                 request.getId(),
                 request.getDescription(),
-                request.getRequesterId(),
                 request.getCreated()
         );
     }
 
-    public static ItemRequest toItemRequest(ItemRequestDto requestDto) {
+    public static ItemRequest toItemRequest(ItemRequestDto requestDto, Long requesterId) {
         return new ItemRequest(
                 requestDto.getId(),
                 requestDto.getDescription(),
-                requestDto.getRequesterId(),
+                requesterId,
                 requestDto.getCreated()
         );
     }

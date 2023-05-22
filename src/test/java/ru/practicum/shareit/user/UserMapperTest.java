@@ -21,6 +21,6 @@ public class UserMapperTest {
     void toUserFromUserDto_returnedUser() {
         User expectedUser = UserMapper.toUser(userDto);
 
-        assertEquals(user, expectedUser);
+        assertEquals(user.toString(), expectedUser.toString());
     }
 }

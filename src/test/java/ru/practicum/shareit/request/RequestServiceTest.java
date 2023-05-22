@@ -13,6 +13,7 @@ import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.dto.ItemRequestReplyDto;
 import ru.practicum.shareit.user.UserRepository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -35,9 +36,9 @@ public class RequestServiceTest {
     private ItemRequestRepository requestRepository;
     private ItemRequestService service;
     private final Long id = 1L;
-    private final LocalDateTime now = LocalDateTime.parse("2023-05-18T09:55:05.000001");
-    private final ItemRequestDto requestDto = new ItemRequestDto(id, "name", id, now);
-    private final ItemRequest request = ItemRequestMapper.toItemRequest(requestDto);
+    private final LocalDateTime now = LocalDateTime.parse(LocalDate.now() + "T09:55:05.000001");
+    private final ItemRequestDto requestDto = new ItemRequestDto(id, "name", now);
+    private final ItemRequest request = ItemRequestMapper.toItemRequest(requestDto, id);
     private final ItemRequestReplyDto requestReplyDto = ItemRequestMapper.toItemRequestReplyDto(requestDto, new ArrayList<>());
 
     @BeforeEach
@@ -50,7 +51,7 @@ public class RequestServiceTest {
         when(userRepository.existsById(anyLong())).thenReturn(true);
         when(requestRepository.save(any())).thenReturn(request);
 
-        ItemRequestDto expectedUser = service.createRequest(requestDto);
+        ItemRequestDto expectedUser = service.createRequest(requestDto, id);
         requestDto.setCreated(now);
 
         assertEquals(requestDto, expectedUser);

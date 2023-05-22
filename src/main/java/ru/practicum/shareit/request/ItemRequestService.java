@@ -8,9 +8,10 @@ import java.util.List;
 public interface ItemRequestService {
     /**
      * @param requestDto
+     * @param requesterId
      * @return
      */
-    ItemRequestDto createRequest(ItemRequestDto requestDto);
+    ItemRequestDto createRequest(ItemRequestDto requestDto, Long requesterId);
 
     /**
      * @param userId
