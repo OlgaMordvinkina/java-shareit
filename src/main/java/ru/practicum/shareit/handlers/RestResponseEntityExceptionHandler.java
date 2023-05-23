@@ -92,6 +92,22 @@ public class RestResponseEntityExceptionHandler {
                 .body(objectMapper.writeValueAsString(response));
     }
 
+    @ExceptionHandler(NotFoundItemRequestException.class)
+    protected ResponseEntity<Object> handleConflict(NotFoundItemRequestException ex) throws JsonProcessingException {
+        ErrorResponse response = ErrorResponse.builder()
+                .code(HttpStatus.NOT_FOUND.value())
+                .errors(
+                        List.of(ErrorsDescription.builder()
+                                .message(ex.getMessage())
+                                .build())
+                ).build();
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(objectMapper.writeValueAsString(response));
+    }
+
     @ExceptionHandler(RegisterException.class)
     protected ResponseEntity<Object> handleConflict(RegisterException ex) throws JsonProcessingException {
         ErrorResponse response = ErrorResponse.builder()
@@ -169,6 +185,22 @@ public class RestResponseEntityExceptionHandler {
 
     @ExceptionHandler(ConstraintViolationException.class)
     protected ResponseEntity<Object> handleConflict(ConstraintViolationException ex) throws JsonProcessingException {
+        ErrorResponse response = ErrorResponse.builder()
+                .code(HttpStatus.BAD_REQUEST.value())
+                .errors(
+                        List.of(ErrorsDescription.builder()
+                                .message(ex.getMessage())
+                                .build())
+                ).build();
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(objectMapper.writeValueAsString(response));
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    protected ResponseEntity<Object> handleConflict(IllegalArgumentException ex) throws JsonProcessingException {
         ErrorResponse response = ErrorResponse.builder()
                 .code(HttpStatus.BAD_REQUEST.value())
                 .errors(

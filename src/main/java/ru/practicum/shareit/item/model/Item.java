@@ -23,4 +23,6 @@ public class Item {
     @JoinColumn(name = "owner_id")
     private User owner;
     private Boolean available;
+    @JoinColumn(name = "request_id")
+    private Long requestId;
 }

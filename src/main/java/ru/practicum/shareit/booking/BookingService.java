@@ -48,7 +48,7 @@ public interface BookingService {
      * @return
      * @throws ValidationException
      */
-    List<BookingFullDto> getBookings(String state, Long bookerId) throws ValidationException;
+    List<BookingFullDto> getBookings(String state, Long bookerId, int from, int size) throws ValidationException;
 
     /**
      * get  a list Bookings owners
@@ -58,5 +58,5 @@ public interface BookingService {
      * @return
      * @throws NotValidDataException
      */
-    List<BookingFullDto> getBookingsOwner(String state, Long bookerId) throws NotValidDataException;
+    List<BookingFullDto> getBookingsOwner(String state, Long bookerId, int from, int size) throws NotValidDataException;
 }

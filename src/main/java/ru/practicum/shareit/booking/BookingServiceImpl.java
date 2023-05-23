@@ -2,6 +2,9 @@ package ru.practicum.shareit.booking;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,17 +19,17 @@ import ru.practicum.shareit.user.model.User;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
 @Slf4j
-@Transactional
+@Transactional(readOnly = true)
 public class BookingServiceImpl implements BookingService {
-    private final BookingRepository repository;
-    private final UserRepository userRepository;
     private final ItemRepository itemRepository;
+    private final UserRepository userRepository;
+    private final BookingRepository repository;
 
+    @Transactional
     @Override
     public BookingFullDto createBooking(BookingDto bookingDto, Long bookerId) throws NotValidDataException {
         User user = userExist(bookerId);
@@ -37,16 +40,15 @@ public class BookingServiceImpl implements BookingService {
         if (Objects.equals(booking.getItem().getOwner().getId(), bookerId)) {
             throw new AccessException("Вы не можете арендовать свою вещь");
         }
-        log.info("Получен запрос POST /bookings");
         log.info("Создан Booking {}", booking);
         return BookingMapper.toBookingFullDto(repository.save(booking));
     }
 
+    @Transactional
     @Override
     public BookingFullDto setStatusBooking(Long bookingId, Long userId, Boolean approved) throws NotValidDataException {
         Booking booking = bookingExist(bookingId);
         User user = userExist(userId);
-        log.info("Получен запрос PATCH /bookings/{bookingId}");
         if (!Objects.equals(user.getId(), booking.getItem().getOwner().getId())) {
             throw new AccessException("Вы не являeтесь владельцем вещи c ID: " + bookingId);
         }
@@ -65,12 +67,10 @@ public class BookingServiceImpl implements BookingService {
         return BookingMapper.toBookingFullDto(repository.save(booking));
     }
 
-    @Transactional(readOnly = true)
     @Override
     public BookingFullDto getBooking(Long bookingId, Long userId) {
         Booking booking = bookingExist(bookingId);
         User user = userExist(userId);
-        log.info("Получен запрос GET /bookings/{bookingId}");
         if (!Objects.equals(user.getId(), booking.getItem().getOwner().getId())
                 && !Objects.equals(user.getId(), booking.getBooker().getId())) {
             throw new AccessException("У вас нет доступа для просмотра бронирования с ID: " + bookingId);
@@ -79,76 +79,70 @@ public class BookingServiceImpl implements BookingService {
         return BookingMapper.toBookingFullDto(booking);
     }
 
-    @Transactional(readOnly = true)
     @Override
-    public List<BookingFullDto> getBookings(String state, Long bookerId) throws NotValidDataException {
+    public List<BookingFullDto> getBookings(String state, Long bookerId, int from, int size) throws NotValidDataException {
         userExist(bookerId);
-        log.info("Получен запрос GET /bookings");
         LocalDateTime now = LocalDateTime.now();
-        Sort sortDescByStart = Sort.by(Sort.Direction.DESC, "start");
-        List<Booking> bookings;
+        Pageable pages = PageRequest.of(from / size, size, Sort.by(Sort.Direction.DESC, "start"));
+
+        Page<Booking> bookings;
         switch (state) {
             case ("ALL"):
-                bookings = repository.findBookingsByBookerId(bookerId, sortDescByStart);
+                bookings = repository.findBookingsByBookerId(bookerId, pages);
                 break;
             case ("CURRENT"):
-                bookings = repository.findBookingsByBookerIdAndStartIsBeforeAndEndIsAfter(bookerId, now, now, sortDescByStart);
+                bookings = repository.findBookingsByBookerIdAndStartIsBeforeAndEndIsAfter(bookerId, now, now, pages);
                 break;
             case ("PAST"):
-                bookings = repository.findBookingsByBookerIdAndEndIsBefore(bookerId, now, sortDescByStart);
+                bookings = repository.findBookingsByBookerIdAndEndIsBefore(bookerId, now, pages);
                 break;
             case ("FUTURE"):
-                bookings = repository.findBookingsByBookerIdAndStartIsAfter(bookerId, now, sortDescByStart);
+                bookings = repository.findBookingsByBookerIdAndStartIsAfter(bookerId, now, pages);
                 break;
             case ("WAITING"):
-                bookings = repository.findBookingsByBookerIdAndStatus(bookerId, Status.WAITING, sortDescByStart);
+                bookings = repository.findBookingsByBookerIdAndStatus(bookerId, Status.WAITING, pages);
                 break;
             case ("REJECTED"):
-                bookings = repository.findBookingsByBookerIdAndStatus(bookerId, Status.REJECTED, sortDescByStart);
+                bookings = repository.findBookingsByBookerIdAndStatus(bookerId, Status.REJECTED, pages);
                 break;
             default:
                 throw new NotValidDataException("Unknown state: " + state);
         }
         log.info("Получены Bookings {}", bookings);
-        return bookings.stream()
-                .map(BookingMapper::toBookingFullDto)
-                .collect(Collectors.toList());
+        return bookings.map(BookingMapper::toBookingFullDto).toList();
     }
 
-    @Transactional(readOnly = true)
     @Override
-    public List<BookingFullDto> getBookingsOwner(String state, Long ownerId) throws NotValidDataException {
+    public List<BookingFullDto> getBookingsOwner(String state, Long ownerId, int from, int size) throws NotValidDataException {
         userExist(ownerId);
-        log.info("Получен запрос GET /bookings");
         LocalDateTime now = LocalDateTime.now();
-        Sort sortDescByStart = Sort.by(Sort.Direction.DESC, "start");
-        List<Booking> bookings;
+        Pageable pages = PageRequest.of(from / size, size, Sort.by(Sort.Direction.DESC, "start"));
+
+        Page<Booking> bookings;
         switch (state) {
             case ("ALL"):
-                bookings = repository.findAllByItem_OwnerId(ownerId, sortDescByStart);
+                bookings = repository.findAllByItem_OwnerId(ownerId, pages);
                 break;
             case ("CURRENT"):
-                bookings = repository.findAllByItem_OwnerIdAndStartIsBeforeAndEndIsAfter(ownerId, now, now, sortDescByStart);
+                bookings = repository.findAllByItem_OwnerIdAndStartIsBeforeAndEndIsAfter(ownerId, now, now, pages);
                 break;
             case ("PAST"):
-                bookings = repository.findAllByItem_OwnerIdAndEndIsBefore(ownerId, now, sortDescByStart);
+                bookings = repository.findAllByItem_OwnerIdAndEndIsBefore(ownerId, now, pages);
                 break;
             case ("FUTURE"):
-                bookings = repository.findBookingsByItem_OwnerIdAndStartIsAfter(ownerId, now, sortDescByStart);
+                bookings = repository.findBookingsByItem_OwnerIdAndStartIsAfter(ownerId, now, pages);
                 break;
             case ("WAITING"):
-                bookings = repository.findAllByItem_OwnerIdAndStatus(ownerId, Status.WAITING, sortDescByStart);
+                bookings = repository.findAllByItem_OwnerIdAndStatus(ownerId, Status.WAITING, pages);
                 break;
             case ("REJECTED"):
-                bookings = repository.findAllByItem_OwnerIdAndStatus(ownerId, Status.REJECTED, sortDescByStart);
+                bookings = repository.findAllByItem_OwnerIdAndStatus(ownerId, Status.REJECTED, pages);
                 break;
             default:
                 throw new NotValidDataException("Unknown state: " + state);
         }
         log.info("Получены Bookings {}", bookings);
-        return bookings.stream()
-                .map(BookingMapper::toBookingFullDto)
-                .collect(Collectors.toList());
+        return bookings.map(BookingMapper::toBookingFullDto).toList();
     }
 
     private Item itemExist(Long id) {
