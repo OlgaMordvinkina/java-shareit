@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.practicum.shareit.exceptions.model.ErrorResponse;
 import ru.practicum.shareit.exceptions.model.ErrorsDescription;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -47,6 +48,25 @@ public class RestResponseEntityExceptionHandler {
 
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(objectMapper.writeValueAsString(response));
+    }
+
+    @ExceptionHandler(Throwable.class)
+    protected ResponseEntity<Object> handleConflict(final Throwable ex) throws JsonProcessingException {
+        ErrorResponse response = ErrorResponse.builder()
+                .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                .errors(
+                        Collections.singletonList(
+                                ErrorsDescription.builder()
+                                        .fieldName(null)
+                                        .message(ex.getMessage())
+                                        .build())
+                        )
+                .build();
+
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(objectMapper.writeValueAsString(response));
     }

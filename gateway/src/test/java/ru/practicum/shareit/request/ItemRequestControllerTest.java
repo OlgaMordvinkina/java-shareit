@@ -30,6 +30,7 @@ public class ItemRequestControllerTest {
 
         mvc.perform(post("/requests")
                         .content(mapper.writeValueAsString(requestOne))
+                        .header(header, 1L)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
