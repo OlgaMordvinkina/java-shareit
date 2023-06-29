@@ -13,3 +13,10 @@ Java 11 на базе Spring Boot. В разработке использова�
 
 ### Diagram:
 ![diagram.jpg](diagram.jpg)
+
+### Варианты запуска приложения:
+1. Командой «docker-compose up» (Для запуска через докер);
+2. Запустить модули:
+- «shareit-server»: java-shareit/server/src/main/java/ru/practicum/shareit/ShareitServer -> "run";
+- «shareit-gateway»: java-shareit/gateway/src/main/java/ru/practicum/shareit/ShareitGateway -> "run".
+
